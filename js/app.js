@@ -18,16 +18,26 @@ define([
   var initialize = function() {
     pace.start({document: false, ajax: {trackMethods: ['GET', 'POST', 'PUT', 'DELETE']}, restartOnRequestAfter: 250, minTime: 250});
     var app = this;
-    //See if we have a logged in user.
-    $.get("/loggedInUser").done(function(data) {
-      if (data != "") {
-        app.user = new User(data);
-      }
-      // Pass in our Router module and call it's initialize function
-      app.router = Router.initialize();
-    });
-
-    
+    app.router = Router.initialize();
+    $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
+      var api = "";
+    switch(document.location.hostname) {
+      case ("localhost"):
+        api = "http://localhost:1337";
+        break;
+      case("staging.mathmlcloud.org"):
+        api = "https://staging.mathmlcloud.org";
+        break;
+      case("mathmlcloud.org"):
+        api = "https://mathmlcloud.org";
+        break;
+      default:
+        //do nothing/
+        break;
+    }
+    options.url = api + options.url;
+    options.crossDomain = true;
+  });
     
     //initialize validation.
     validation.configure({
