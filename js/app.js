@@ -26,11 +26,10 @@ define([
         api = "http://localhost:1337";
         break;
       case("staging.mathmlcloud.org"):
-        jqXHR.setRequestHeader('ocp-apim-subscription-key', "2e334169c85749f8a33072663e214369");
-        api = "https://api.staging.mathmlcloud.org";
+        api = "https://staging.mathmlcloud.org";
         break;
       case("mathmlcloud.org"):
-        api = "https://api.mathmlcloud.org";
+        api = "https://mathmlcloud.org";
         break;
       default:
         //do nothing/
