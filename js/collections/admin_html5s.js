@@ -17,7 +17,7 @@ define([
     },
 
     parseState: function (resp, queryParams, state, options) {
-      return {totalRecords: resp.numHtml5s};
+      return {totalRecords: resp.numHtml5};
     },
 
     // get the actual records
