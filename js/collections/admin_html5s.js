@@ -13,11 +13,11 @@ define([
     },
 
     state: {
-      pageSize: 10
+      pageSize: 20
     },
 
     parseState: function (resp, queryParams, state, options) {
-      return {totalRecords: resp.numHtml5s};
+      return {totalRecords: resp.numHtml5};
     },
 
     // get the actual records
