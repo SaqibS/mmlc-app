@@ -23,6 +23,17 @@ The app will be running at http://localhost:4567.
 
 The app expects the API to be running at http://localhost:1337. If you'd like to test against staging, edit js/app.js#initialize.
 
+### Installation as front end for the mmlc-api
+Follow instructions at https://github.com/benetech/mmlc-api to install the api locally for development. 
+
+```
+cd path/to/mmlc-api/
+git clone https://github.com/benetech/mmlc-app.git assets
+```
+
+When you start the api, the front end will be installed and running at http://localhost:1337
+
+
 ### Hosting
 
 An instance of this application is hosted by Benetech in Microsoft Azure at https://mathmlcloud.org
