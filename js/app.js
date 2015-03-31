@@ -18,26 +18,37 @@ define([
   var initialize = function() {
     pace.start({document: false, ajax: {trackMethods: ['GET', 'POST', 'PUT', 'DELETE']}, restartOnRequestAfter: 250, minTime: 250});
     var app = this;
-    app.router = Router.initialize();
+    if ($("#access_token").val() != "") {
+      $.get("/loggedInUser?access_token=" + $("#access_token").val())
+      .success(function(data, textStatus, jqXHR) {
+        App.user = new User(data);
+      })
+      .always(function() {
+        app.router = Router.initialize();   
+      });
+    } else {
+      app.router = Router.initialize();
+    }
+    
     $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
       var api = "";
-    switch(document.location.hostname) {
-      case ("localhost"):
-        api = "http://localhost:1337";
-        break;
-      case("staging.mathmlcloud.org"):
-        api = "https://staging.mathmlcloud.org";
-        break;
-      case("mathmlcloud.org"):
-        api = "https://mathmlcloud.org";
-        break;
-      default:
-        //do nothing/
-        break;
-    }
-    options.url = api + options.url;
-    options.crossDomain = true;
-  });
+      switch(document.location.hostname) {
+        case ("localhost"):
+          api = "http://localhost:1337";
+          break;
+        case("staging.mathmlcloud.org"):
+          api = "https://staging.mathmlcloud.org";
+          break;
+        case("mathmlcloud.org"):
+          api = "https://mathmlcloud.org";
+          break;
+        default:
+          //do nothing/
+          break;
+      }
+      options.url = api + options.url;
+      options.crossDomain = true;
+    });
     
     //initialize validation.
     validation.configure({

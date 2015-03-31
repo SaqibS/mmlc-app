@@ -5,11 +5,13 @@ define([
   'backbone',
   'bootstrap',
   'js/views/sign_up.js',
+  'js/models/equation.js',
+  'js/models/html5.js',
   'text!/templates/user_nav.html',
   'text!/templates/public_nav.html',
   'js/models/user.js',
   'js/views/form.js'
-], function($, _, Backbone, bootstrap, SignUpView, userNavTemplate, publicNavTemplate, User, FormView) {
+], function($, _, Backbone, bootstrap, SignUpView, Equation, Html5, userNavTemplate, publicNavTemplate, User, FormView) {
   var NavBarView = Backbone.View.extend({
 
     events: {
@@ -47,7 +49,9 @@ define([
       var submitForm = $(e.currentTarget);
       $.post($(submitForm).attr("action"), {username: $("#username").val(), password: $("#password").val()}, function(data) {
         App.user = new User(data);
+        $("#access_token").val(App.user.get("access_token"));
         navbar.render();
+        navbar.checkForDanglingConversions();
         $("#homePageWelcome").hide();
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
@@ -63,9 +67,9 @@ define([
       $.get("/logout?access_token=" + App.user.get("access_token"), function(data) {
         if(data.message == "logout successful") {
           delete App.user;
+          $("#access_token").val("");
           navbar.render();
-          var formView = new FormView();
-          formView.render();
+          App.router.navigate('#/', {trigger: true});
         }
       });
     },
@@ -79,6 +83,14 @@ define([
       $("#mmlcModal").on('hidden.bs.modal', function (e) {
         navBar.render();
       });
+    },
+
+    checkForDanglingConversions: function() {
+      if (App.router.mainContentView.currentView.model instanceof Equation || App.router.mainContentView.currentView.model instanceof Html5) {
+        if (confirm("Would you like to save this processed request to your account history?")) {
+          App.router.mainContentView.currentView.model.save({"access_token": App.user.get("access_token")});  
+        }
+      }
     }
     
   });
