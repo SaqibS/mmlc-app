@@ -82,16 +82,21 @@ define([
       signUpView.render();
       $("#mmlcModal").modal('show');
       $("#mmlcModal").on('hidden.bs.modal', function (e) {
-        alert("YUP");
+        $("#mmlcModal").unbind('hidden.bs.modal');
         navBar.render();
+        navBar.checkForDanglingConversions();
+        $("#homePageWelcome").hide();
       });
     },
 
     checkForDanglingConversions: function() {
-      if (App.router.mainContentView.currentView.model instanceof Equation || App.router.mainContentView.currentView.model instanceof Html5) {
+      if (App.user && App.router.mainContentView.currentView.model instanceof Equation || App.router.mainContentView.currentView.model instanceof Html5) {
         var confirmAddToAccountView = new ConfirmAddToAccountView();
         confirmAddToAccountView.render();
         $("#mmlcModal").modal('show');
+        setTimeout(function() {
+          confirmAddToAccountView.$("#question").focus();
+        }, 1000);
       }
     }
     
