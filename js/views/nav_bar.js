@@ -10,8 +10,9 @@ define([
   'text!/templates/user_nav.html',
   'text!/templates/public_nav.html',
   'js/models/user.js',
-  'js/views/form.js'
-], function($, _, Backbone, bootstrap, SignUpView, Equation, Html5, userNavTemplate, publicNavTemplate, User, FormView) {
+  'js/views/form.js',
+  'js/views/confirm_add_to_account.js'
+], function($, _, Backbone, bootstrap, SignUpView, Equation, Html5, userNavTemplate, publicNavTemplate, User, FormView, ConfirmAddToAccountView) {
   var NavBarView = Backbone.View.extend({
 
     events: {
@@ -81,15 +82,16 @@ define([
       signUpView.render();
       $("#mmlcModal").modal('show');
       $("#mmlcModal").on('hidden.bs.modal', function (e) {
+        alert("YUP");
         navBar.render();
       });
     },
 
     checkForDanglingConversions: function() {
       if (App.router.mainContentView.currentView.model instanceof Equation || App.router.mainContentView.currentView.model instanceof Html5) {
-        if (confirm("Would you like to save this processed request to your account history?")) {
-          App.router.mainContentView.currentView.model.save({"access_token": App.user.get("access_token")});  
-        }
+        var confirmAddToAccountView = new ConfirmAddToAccountView();
+        confirmAddToAccountView.render();
+        $("#mmlcModal").modal('show');
       }
     }
     
