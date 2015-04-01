@@ -6,6 +6,7 @@
             <th class="info">Username</th>
             <th class="info">First Name</th>
             <th class="info">Last Name</th>
+            <th class="info">Role</th>
             <th class="info">Organization</th>
             <th class="info">Organization Affiliations</th>
             <th class="info">Date</th>
@@ -18,6 +19,7 @@
             <td><%= u.get("username") %></td>
             <td><%= u.get("firstName") %></td>
             <td><%= u.get("lastName") %></td>
+            <td><%= u.get("role") %></td>
             <td><%= typeof(u.get("organization")) != "undefined" ? u.get("organization") : "N/A"%></td>
             <td><%= typeof(u.get("organizationTypes")) != "undefined" ? u.get("organizationTypes") : "N/A" %></td>
             <td><%= u.get("createdAt") %></td>
