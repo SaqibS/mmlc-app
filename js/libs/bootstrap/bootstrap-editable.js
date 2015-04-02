@@ -1529,6 +1529,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             //attach handler activating editable. In disabled mode it just prevent default action (useful for links)
             if(this.options.toggle !== 'manual') {
                 this.$element.addClass('editable-click');
+                this.isEmpty = this.$element.html() == ""; 
                 this.$element.append('<span class="sr-only">(Click To Edit)</span>');
                 this.$element.on(this.options.toggle + '.editable', $.proxy(function(e){
                     //prevent following link if editable enabled
@@ -2190,7 +2191,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
         @type string
         @default 'Empty'
         **/         
-        emptytext: 'Empty',
+        emptytext: 'Empty <span class="sr-only">(Click To Edit)</span>',
         /**
         Allows to automatically set element's text based on it's value. Can be <code>auto|always|never</code>. Useful for select and date.
         For example, if dropdown list is <code>{1: 'a', 2: 'b'}</code> and element's value set to <code>1</code>, it's html will be automatically set to <code>'a'</code>.  
