@@ -6,6 +6,7 @@
             <th class="info">Username</th>
             <th class="info">First Name</th>
             <th class="info">Last Name</th>
+            <th class="info">Role</th>
             <th class="info">Organization</th>
             <th class="info">Organization Affiliations</th>
             <th class="info">Date</th>
@@ -15,12 +16,13 @@
     <% _.each(users, function (u) { %>
         <tr>
             <td><%= u.get("id") %></td>
-            <td><%= u.get("username") %></td>
-            <td><%= u.get("firstName") %></td>
-            <td><%= u.get("lastName") %></td>
-            <td><%= typeof(u.get("organization")) != "undefined" ? u.get("organization") : "N/A"%></td>
-            <td><%= typeof(u.get("organizationTypes")) != "undefined" ? u.get("organizationTypes") : "N/A" %></td>
-            <td><%= u.get("createdAt") %></td>
+            <td><a href="#" class="username" data-type="text" data-pk="<%= u.get("id") %>" data-placement="right" data-title="Enter username"><%= u.get("username") %></a></td>
+            <td><a href="#"  class="firstName" data-type="text" data-pk="<%= u.get("id") %>" data-value="<%= u.get("firstName") %>" data-title="Enter First Name"><%= u.get("firstName") %></a></td>
+            <td><a href="#"  class="lastName" data-type="text" data-pk="<%= u.get("id") %>" data-value="<%= u.get("lastName") %>" data-title="Enter Last Name"><%= u.get("lastName") %></a></td>
+            <td><a href="#"  class="role" data-type="select" data-pk="<%= u.get("id") %>" data-value="<%= u.get("role") %>" data-title="Select Role"><%= u.get("role") %></a></td>
+            <td><a href="#" class="organization editable" data-type="text" data-pk="<%= u.get("id") %>" data-placement="right" data-title="Enter Organization"><%= typeof(u.get("organization")) != "undefined" ? u.get("organization") : ""%></a></td>
+            <td><a href="#" class="organization-roles editable" data-pk="<%= u.get("id") %>" data-type="checklist" data-value="<%= u.get("organizationTypes") %>" data-title="Select Organization Affiliations"><%= typeof(u.get("organizationTypes")) != "undefined" ? u.get("organizationTypes") : "" %></a></td>
+            <td><%= moment(u.get("createdAt")).format('MMMM DD, YYYY') %></td>
         </tr>
     <% }) %>
     </tbody>

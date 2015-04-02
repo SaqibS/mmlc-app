@@ -3,6 +3,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'editable',
   'js/views/equations.js',
   'js/views/pagination.js',
   'js/views/feedback.js',
@@ -13,8 +14,13 @@ define([
   'js/collections/admin_users.js',
   'js/collections/admin_html5s.js',
   'text!/templates/admin.html'
-], function($, _, Backbone, EquationsView, PaginationView, FeedbackView, UsersView, UploadsView, EquationsCollection, FeedbackCollection, UsersCollection, Html5sCollection, adminTemplate) {
+], function($, _, Backbone, editable, EquationsView, PaginationView, FeedbackView, UsersView, UploadsView, EquationsCollection, FeedbackCollection, UsersCollection, Html5sCollection, adminTemplate) {
   var AdminView = Backbone.View.extend({
+
+    events: {
+      "click .tab": "setFocusOnH2"
+    },
+
     render: function() {
       var compiledTemplate = _.template(adminTemplate)({dashboard: this.model});;
       this.$el.html(compiledTemplate);
@@ -25,6 +31,12 @@ define([
       adminView.addUsers();
       adminView.addUploads();
       return this;
+    },
+
+    setFocusOnH2: function() {
+      setTimeout(function() {
+        $("h2:visible:first").attr('tabindex', '-1').focus();
+      }, 500);
     },
 
     addEquations: function() {
@@ -83,13 +95,74 @@ define([
     },
 
     renderUsers: function() {
-      if (this.usersView) {
-        this.usersView.remove();
+      var adminView = this;
+      if (adminView.usersView) {
+        adminView.usersView.remove();
       }
       //Add users
-      this.usersView = new UsersView({collection: this.users});
-      this.$("#users .results").html(this.usersView.render().el);
-      this.usersView.delegateEvents();
+      adminView.usersView = new UsersView({collection: adminView.users});
+      adminView.$("#users .results").html(adminView.usersView.render().el);
+      adminView.usersView.delegateEvents();
+      //Add editables.
+      $('.username').editable({
+        type: 'text',
+        name: 'username',
+        label: 'Enter Username',
+        success: function(response, newValue) {
+          adminView.usersView.collection.get($(this).data("pk")).save({access_token: App.user.get("access_token"), username: newValue});
+        }
+      });
+      $('.firstName').editable({
+        type: 'text',
+        name: 'firstName',
+        label: 'Enter First Name',
+        success: function(response, newValue) {
+          adminView.usersView.collection.get($(this).data("pk")).save({access_token: App.user.get("access_token"), firstName: newValue});
+        }
+      });
+      $('.lastName').editable({
+        type: 'text',
+        name: 'lastName',
+        label: 'Enter Last Name',
+        success: function(response, newValue) {
+          adminView.usersView.collection.get($(this).data("pk")).save({access_token: App.user.get("access_token"), lastName: newValue});
+        }
+      });
+      $('.role').editable({
+        label: 'Enter Role',
+        source: [
+          {value: "user", text: 'user'},
+          {value: "admin", text: 'admin'}
+        ],
+        success: function(response, newValue) {
+          adminView.usersView.collection.get($(this).data("pk")).save({access_token: App.user.get("access_token"), role: newValue});
+        } 
+      }); 
+      $('.organization').editable({
+        type: 'text',
+        name: 'username',
+        label: 'Enter Organization',
+        success: function(response, newValue) {
+          adminView.usersView.collection.get($(this).data("pk")).save({access_token: App.user.get("access_token"), organization: newValue});
+        } 
+      }); 
+      $('.organization-roles').editable({
+        label: 'Enter Organization Affiliation',
+        limit: 3,
+        source: [
+          {value: "K-12 Education", text: "K-12 Education"},
+          {value: "Post-Secondary Education", text: "Learning Management System"},
+          {value: "Academic Administration", text: "Academic Administration"},
+          {value: "Original Content Author", text: "Original Content Author"},
+          {value: "Publisher / Product Owner", text: "Publisher / Product Owner"},
+          {value: "Service Provider", text: "Service Provider"},
+          {value: "Classroom Instructor", text: "Classroom Instructor"},
+          {value: "Other", text: "Other"}
+        ],
+        success: function(response, newValue) {
+          adminView.usersView.collection.get($(this).data("pk")).save({access_token: App.user.get("access_token"), organizationTypes: newValue});
+        } 
+      }); 
     },
 
     addUploads: function() {
