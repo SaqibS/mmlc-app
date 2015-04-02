@@ -12,7 +12,8 @@ require.config({
     validation: 'libs/backbone/backbone-validation-amd-min',
     paginator: 'libs/backbone/backbone.paginator.min',
     pace: 'libs/pace',
-    moment: 'libs/moment'
+    moment: 'libs/moment',
+    editable: 'libs/bootstrap/bootstrap-editable'
   },
   shim: {
     "backbone": {
@@ -34,6 +35,10 @@ require.config({
     "paginator": {
       deps: ["underscore", "backbone"],
       exports: "paginator"
+    },
+    "editable": {
+      deps: ["jquery", "bootstrap"],
+      exports: "editable"
     }
   },
   urlArgs: "bust=" + (new Date()).getTime()
